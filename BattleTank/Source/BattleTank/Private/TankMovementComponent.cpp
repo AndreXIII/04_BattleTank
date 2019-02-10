@@ -1,6 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "TankMovementComponent.h"
+#include "GameFramework/NavMovementComponent.h"
+// #include "GameFramework/Actor.h"
 #include "TankTrack.h"
 
 
@@ -10,6 +12,10 @@ void UTankMovementComponent::Initialise(UTankTrack* LeftTrackToSet, UTankTrack* 
 	RightTrack = RightTrackToSet;
 }
 
+void UTankMovementComponent::RequestDirectMove(const FVector& MoveVelocity, bool bForceMaxSpeed)
+{
+	UE_LOG(LogTemp, Warning, TEXT("%s vectoring to %s"), *GetOwner()->GetName(), *MoveVelocity.ToString());
+}
 
 void UTankMovementComponent::IntendMoveForward(float Throw)
 {
