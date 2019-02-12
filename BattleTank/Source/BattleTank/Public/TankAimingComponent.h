@@ -1,10 +1,19 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Copyright Ivanov Andrey.
 
 #pragma once
 
 #include "CoreMinimal.h"
 #include "Components/StaticMeshComponent.h"
 #include "TankAimingComponent.generated.h"
+
+//Enum for aiming state
+UENUM()
+enum class EFiringState : uint8
+{
+	Reloading,
+	Aiming,
+	Locked
+};
 
  // Forward declaration
 class UTankBarrel;
@@ -26,10 +35,13 @@ public:
 
 	void AimAt(FVector HitLocation, float LaunchSpeed);
 
+protected:
+	UPROPERTY(BlueprintReadOnly, Category = "State")
+	EFiringState FiringState = EFiringState::Aiming;
+
 private:
 	UTankBarrel* Barrel = nullptr;
 	UTankTurret* Turret = nullptr;
 
 	void MoveBarrelTowards(FVector AimDirection);
-
 };
