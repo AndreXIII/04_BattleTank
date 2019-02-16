@@ -8,7 +8,6 @@
 
 // Forward declaration
 class UTankBarrel;
-class UTankAimingComponent;
 class AProjectile;
 
 UCLASS()
@@ -20,17 +19,12 @@ public:
 	// Sets default values for this pawn's properties
 	ATank();
 
-	void AimAt(FVector HitLocation);
-
 	UFUNCTION(BlueprintCallable, Category = "Firing")
 	void Fire();
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
-	UPROPERTY(BlueprintReadOnly)
-	UTankAimingComponent* TankAimingComponent = nullptr;
 
 private:	
 	UPROPERTY(EditDefaultsOnly, Category = "Setup")
