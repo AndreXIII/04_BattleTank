@@ -29,6 +29,8 @@ private:
 	// where the crosshair intersects the word
 	void AimTowardsCrosshair();
 
+	virtual void SetPawn(APawn* InPawn) override;
+
 	// Return an OUT parameter, rtue if hit landscape
 	bool GetSightRayHitLocation(FVector& OutHitLocation) const;
 
@@ -47,4 +49,6 @@ private:
 
 	UTankAimingComponent* TankAimingComponent = nullptr;
 
+	UFUNCTION()
+	void OnPossedTankDeath();
 };
