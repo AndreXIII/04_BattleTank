@@ -1,6 +1,8 @@
 // Copyright Ivanov Andrey.
 
 #include "Projectile.h"
+
+#include "Kismet/GameplayStatics.h"
 #include "Classes/Particles/ParticleSystemComponent.h"
 #include "Classes/Components/StaticMeshComponent.h"
 #include "Classes/PhysicsEngine/RadialForceComponent.h"
@@ -31,8 +33,8 @@ AProjectile::AProjectile()
 	ImpactBlast->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 	ImpactBlast->bAutoActivate = false;
 
-	ExplosionForse = CreateDefaultSubobject<URadialForceComponent>(FName("Explosion Forse"));
-	ExplosionForse->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
+	ExplosionForce = CreateDefaultSubobject<URadialForceComponent>(FName("Explosion Forse"));
+	ExplosionForce->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 
 }
 
@@ -53,10 +55,19 @@ void AProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, U
 {
 	LaunchBlast->Deactivate();
 	ImpactBlast->Activate();
-	ExplosionForse->FireImpulse();
+	ExplosionForce->FireImpulse();
 
 	SetRootComponent(ImpactBlast);
 	CollisionMesh->DestroyComponent();
+
+	UGameplayStatics::ApplyRadialDamage(
+		this,
+		ProjectileDamage,
+		GetActorLocation(),
+		ExplosionForce->Radius,
+		UDamageType::StaticClass(),
+		TArray<AActor*>() // damage all actors
+	);
 
 	FTimerHandle TimerHandle;
 	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AProjectile::OnTimerExpire, DestroyDelay, false);
