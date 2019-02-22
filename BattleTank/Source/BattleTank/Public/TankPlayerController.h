@@ -17,6 +17,10 @@ class BATTLETANK_API ATankPlayerController : public APlayerController
 {
 	GENERATED_BODY()
 
+public:
+	UFUNCTION()
+	void OnPossedTankDeath();
+
 protected:
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
@@ -49,6 +53,4 @@ private:
 
 	UTankAimingComponent* TankAimingComponent = nullptr;
 
-	UFUNCTION()
-	void OnPossedTankDeath();
 };

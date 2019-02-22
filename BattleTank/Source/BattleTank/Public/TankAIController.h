@@ -21,6 +21,9 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "Setup")
 	float AcceptanceRadius = 8000;
 
+	UFUNCTION()
+	void OnPossedTankDeath();
+
 private:
 	virtual void BeginPlay() override;
 
@@ -30,6 +33,4 @@ private:
 
 	UTankAimingComponent* TankAimingComponent = nullptr;
 
-	UFUNCTION()
-	void OnPossedTankDeath();
 };
