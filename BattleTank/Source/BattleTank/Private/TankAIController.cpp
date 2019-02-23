@@ -4,6 +4,7 @@
 #include "TankAimingComponent.h"
 #include "Engine/World.h"
 #include "Tank.h"
+#include "Mortar.h"
 
 
 void ATankAIController::BeginPlay()
@@ -17,10 +18,17 @@ void ATankAIController::SetPawn(APawn* InPawn)
 	Super::SetPawn(InPawn);
 	if (InPawn)
 	{
-		auto PossessedTank = Cast<ATank>(InPawn);
-		if (!ensure(PossessedTank)) { return; }
-
-		PossessedTank->OnDeath.AddUniqueDynamic(this, &ATankAIController::OnPossedTankDeath);
+		if (auto PossessedTank = Cast<ATank>(InPawn))
+		{
+			if (!ensure(PossessedTank)) { return; }
+			PossessedTank->OnDeath.AddUniqueDynamic(this, &ATankAIController::OnPossedTankDeath);
+		}
+		else if (auto PossessedTank = Cast<AMortar>(InPawn))
+		{
+			if (!ensure(PossessedTank)) { return; }
+			PossessedTank->OnDeath.AddUniqueDynamic(this, &ATankAIController::OnPossedTankDeath);
+		}
+		else { return; }
 	}
 }
 
@@ -37,7 +45,7 @@ void ATankAIController::Tick(float DeltaTime)
 	auto PlayerTank = GetWorld()->GetFirstPlayerController()->GetPawn();
 	auto ControlledTank = GetPawn();
 
-	if (!ensure(PlayerTank && ControlledTank)) { return; }
+	if (!(PlayerTank && ControlledTank)) { return; }
 
 	// Move towards the player
 	MoveToActor(PlayerTank, AcceptanceRadius); // TODO check radius in cm

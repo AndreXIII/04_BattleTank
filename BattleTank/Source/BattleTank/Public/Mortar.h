@@ -4,12 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
-#include "Tank.generated.h"
+#include "Mortar.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FTankDelegate);
 
 UCLASS()
-class BATTLETANK_API ATank : public APawn
+class BATTLETANK_API AMortar : public APawn
 {
 	GENERATED_BODY()
 
@@ -21,11 +20,13 @@ public:
 	UFUNCTION(BlueprintPure, Category = "Health")
 	float GetHealthPercent() const; // TODO implement throw components
 
-	FTankDelegate OnDeath;
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FMortarDelegate);
 
-private:	
+	FMortarDelegate OnDeath;
+
+private:
 	// Sets default values for this pawn's properties
-	ATank();
+	AMortar();
 
 	virtual void BeginPlay() override;
 
