@@ -19,16 +19,16 @@ ASprungWheel::ASprungWheel()
 	LaunchBlast->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 	*/
 
+	MassWheelConstraint = CreateDefaultSubobject<UPhysicsConstraintComponent>(FName("MassWheelConstraint"));
+	SetRootComponent(MassWheelConstraint);
+
 	Mass = CreateDefaultSubobject<UStaticMeshComponent>(FName("Mass"));
-	SetRootComponent(Mass);
+	Mass->SetupAttachment(MassWheelConstraint);
 
 	Wheel = CreateDefaultSubobject<UStaticMeshComponent>(FName("Wheel"));
-	Wheel->SetupAttachment(Mass);
+	Wheel->SetupAttachment(MassWheelConstraint);
 
-	MassWheelConstraint = CreateDefaultSubobject<UPhysicsConstraintComponent>(FName("MassWheelConstraint"));
-	MassWheelConstraint->SetupAttachment(Mass);
-	// MassWheelConstraint->SetConstrainedComponents(Mass, FName("Mass"), Wheel, FName("Wheel"));
-
+	/*
 	MassWheelConstraint->ComponentName1.ComponentName = FName("Mass");
 	MassWheelConstraint->ComponentName2.ComponentName = FName("Wheel");
 
@@ -36,7 +36,7 @@ ASprungWheel::ASprungWheel()
 	MassWheelConstraint->SetLinearPositionDrive(false, false, true);
 	MassWheelConstraint->SetLinearVelocityDrive(false, false, true);
 	MassWheelConstraint->SetLinearDriveParams(50.f, 20.f, 0);
-
+	*/
 }
 
 // Called when the game starts or when spawned
@@ -44,6 +44,14 @@ void ASprungWheel::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	if (GetAttachParentActor())
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Not Null"));
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Null"));
+	}
 }
 
 // Called every frame
