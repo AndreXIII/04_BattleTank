@@ -22,7 +22,7 @@ void USpawnPoint::BeginPlay()
 {
 	Super::BeginPlay();
 
-	auto NewActor = GetWorld()->SpawnActorDeferred<AActor>(SpawnClass, GetComponentTransform());
+	NewActor = GetWorld()->SpawnActorDeferred<AActor>(SpawnClass, GetComponentTransform());
 	if (!NewActor) return;
 	NewActor->AttachToComponent(this, FAttachmentTransformRules::KeepWorldTransform);
 	UGameplayStatics::FinishSpawningActor(NewActor, GetComponentTransform());
@@ -36,4 +36,3 @@ void USpawnPoint::TickComponent(float DeltaTime, ELevelTick TickType, FActorComp
 
 	// ...
 }
-
