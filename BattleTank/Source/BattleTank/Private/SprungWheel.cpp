@@ -4,6 +4,7 @@
 
 #include "Kismet/GameplayStatics.h"
 #include "Classes/Components/StaticMeshComponent.h"
+#include "Classes/Components/SphereComponent.h"
 #include "PhysicsEngine/PhysicsConstraintComponent.h"
 
 // Sets default values
@@ -15,8 +16,14 @@ ASprungWheel::ASprungWheel()
 	MassWheelConstraint = CreateDefaultSubobject<UPhysicsConstraintComponent>(FName("MassWheelConstraint"));
 	SetRootComponent(MassWheelConstraint);
 
-	Wheel = CreateDefaultSubobject<UStaticMeshComponent>(FName("Wheel"));
-	Wheel->SetupAttachment(MassWheelConstraint);
+	Sphere = CreateDefaultSubobject<USphereComponent>(FName("Sphere"));
+	Sphere->SetupAttachment(MassWheelConstraint);
+
+	Axis = CreateDefaultSubobject<UPhysicsConstraintComponent>(FName("Axis"));
+	Axis->SetupAttachment(Sphere);
+
+	Wheel = CreateDefaultSubobject<USphereComponent>(FName("Wheel"));
+	Wheel->SetupAttachment(Sphere);
 }
 
 // Called when the game starts or when spawned
@@ -39,5 +46,6 @@ void ASprungWheel::SetupConstraint()
 	if (!GetAttachParentActor()) return;
 	auto BodyRoot = Cast<UPrimitiveComponent>(GetAttachParentActor()->GetRootComponent());
 	if (!BodyRoot) return;
-	MassWheelConstraint->SetConstrainedComponents(BodyRoot, NAME_None, Wheel, NAME_None);
+	MassWheelConstraint->SetConstrainedComponents(BodyRoot, NAME_None, Sphere, NAME_None);
+	Axis->SetConstrainedComponents(Sphere, NAME_None, Wheel, NAME_None);
 }
